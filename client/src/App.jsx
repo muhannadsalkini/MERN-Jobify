@@ -1,7 +1,43 @@
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  HomeLayout,
+  Landing,
+  Register,
+  Login,
+  DashboardLayout,
+  Error,
+} from "./pages";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <HomeLayout />,
+    errorElement: <Error />,
+    children: [
+      {
+        path: "",
+        element: <Landing />,
+      },
+      {
+        path: "register",
+        element: <Register />,
+      },
+      {
+        path: "login",
+        element: <Login />,
+      },
+      {
+        path: "dashboard",
+        element: <DashboardLayout />,
+      },
+    ],
+  },
+]);
+
 function App() {
   return (
     <>
-      <h1>Jobfy App</h1>
+      <RouterProvider router={router} />
     </>
   );
 }
