@@ -2,7 +2,7 @@ import { Link, useRouteError } from "react-router-dom";
 
 const Error = () => {
   const error = useRouteError(); // Find more about the error
-  // console.log(error)
+  console.log(error);
 
   return (
     <>
