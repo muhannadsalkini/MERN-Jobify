@@ -13,6 +13,7 @@ import {
   Admin,
 } from "./pages";
 
+// Create a router using createBrowserRouter
 const router = createBrowserRouter([
   {
     path: "/",
@@ -20,7 +21,7 @@ const router = createBrowserRouter([
     errorElement: <Error />,
     children: [
       {
-        index: true,
+        index: true, // This route is the index route for HomeLayout
         element: <Landing />,
       },
       {
@@ -64,6 +65,7 @@ const router = createBrowserRouter([
 function App() {
   return (
     <>
+      {/* Provide the router to the application using RouterProvider */}
       <RouterProvider router={router} />
     </>
   );
