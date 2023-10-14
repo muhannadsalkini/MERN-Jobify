@@ -45,11 +45,11 @@ const router = createBrowserRouter([
             element: <Stats />,
           },
           {
-            path: "alljobs",
+            path: "all-jobs",
             element: <AllJobs />,
           },
           {
-            path: "profiles",
+            path: "profile",
             element: <Profile />,
           },
           {
