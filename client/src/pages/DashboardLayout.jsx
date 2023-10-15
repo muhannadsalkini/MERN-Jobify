@@ -11,7 +11,7 @@ const DashboardLayout = () => {
   // For this page all is neede is 3 global values. One for user(comming from server), one for the dark mode and one for the sidebar (open or closed)
 
   // temp
-  const user = { name: "jhon" };
+  const user = { name: "Jhon" };
   const [showSidebar, setShowSidebar] = useState(false);
   const [isDark, setIsDark] = useState(false);
 
