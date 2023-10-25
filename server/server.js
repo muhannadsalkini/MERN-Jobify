@@ -87,6 +87,18 @@ app.delete("/api/v1/jobs/:id", (req, res) => {
   res.status(200).json({ msg: "Job deleted", jobs });
 });
 
+// Not Found Middleware
+app.use("*", (req, res) => {
+  res.status(404).json({ msg: "not found" });
+});
+
+// Error Middleware
+/* Error Middleware get triggerd by the existing reqests. It's used to handle any errors that occur during the processing of a request. misstype error or s*/
+app.use((err, req, res, next) => {
+  console.log(err);
+  res.status(500).json({ msg: "something went wrong" });
+});
+
 app.listen(port, () => {
   console.log(`server running on port ${port}...`);
 });
