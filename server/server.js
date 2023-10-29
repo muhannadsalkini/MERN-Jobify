@@ -1,7 +1,8 @@
 import express from "express";
 import morgan from "morgan"; // Logging HTTP requests in web applications
-import jobRouter from "./Routers/jobRouter.js";
 import * as dotenv from "dotenv";
+import mongoose from "mongoose";
+import jobRouter from "./Routers/jobRouter.js";
 
 dotenv.config();
 
@@ -36,6 +37,12 @@ app.use((err, req, res, next) => {
   res.status(500).json({ msg: "something went wrong" });
 });
 
-app.listen(port, () => {
-  console.log(`server running on port ${port}...`);
-});
+try {
+  await mongoose.connect(process.env.MONGO_URL);
+  app.listen(port, () => {
+    console.log(`server running on port ${port}...`);
+  });
+} catch (error) {
+  console.log(error);
+  process.exit(1);
+}
