@@ -1,4 +1,5 @@
 import { nanoid } from "nanoid"; // creat uniqe id
+import Job from "../models/jobModel.js";
 
 let jobs = [
   { id: nanoid(), company: "apple", position: "front-end" },
@@ -7,30 +8,39 @@ let jobs = [
 
 // GET ALL JOBS
 export const getAllJobs = async (req, res) => {
-  res.status(200).json({ jobs });
+  try {
+    const jobs = await Job.find({});
+    res.status(200).json({ jobs });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: "server error" });
+  }
 };
 
 // CREATE JOB
 export const createJob = async (req, res) => {
   const { company, position } = req.body;
-  if (!company || !position) {
-    return res.status(400).json({ msg: "please provide comapny and position" });
+  // Use try catch to handle errors
+  try {
+    const job = await Job.create({ company, position });
+    res.status(201).json({ job });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: "server error" });
   }
-
-  const id = nanoid(10);
-  const job = { id, company, position };
-  jobs.push(job);
-  res.status(200).json({ job });
 };
 
 // GET A SINGLE JOB
 export const getJob = async (req, res) => {
   const { id } = req.params;
-  const job = jobs.find((job) => job.id === id);
-  if (!job) {
-    return res.status(400).json({ msg: `no job with id ${id}` });
+  try {
+    const job = await Job.findById(id);
+    if (!job) return res.status(404).json({ msg: `no job with id ${id}` });
+    res.status(200).json({ job });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: "server error" });
   }
-  res.status(200).json({ job });
 };
 
 // UPDATE JOB
@@ -38,30 +48,32 @@ export const updateJob = async (req, res) => {
   const { id } = req.params;
   const { company, position } = req.body;
 
-  const job = jobs.find((job) => job.id === id);
-  if (!job) {
-    return res.status(400).json({ msg: `no job with id ${id}` });
+  try {
+    const updatedjob = await Job.findByIdAndUpdate(id, req.body, {
+      new: true,
+    });
+    if (!updatedjob) {
+      return res.status(400).json({ msg: `no job with id ${id}` });
+    }
+    res.status(200).json({ msg: "modified job", updatedjob });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: "server error" });
   }
-
-  if (!company || !position) {
-    return res.status(400).json({ msg: "please provide comapny and position" });
-  }
-
-  job.company = company;
-  job.position = position;
-  res.status(200).json({ msg: "modified job", job });
 };
 
 // DELETE JOB
 export const deleteJob = async (req, res) => {
   const { id } = req.params;
-  const job = jobs.find((job) => job.id === id);
+  try {
+    const removedJob = await Job.findByIdAndDelete(id);
 
-  if (!job) {
-    return res.status(400).json({ msg: `no job with id ${id}` });
+    if (!removedJob) {
+      return res.status(404).json({ msg: `no job with id ${id}` });
+    }
+    res.status(200).json({ job: removedJob });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: "server error" });
   }
-
-  const newJobs = jobs.filter((job) => job.id !== id);
-  jobs = newJobs;
-  res.status(200).json({ msg: "Job deleted", jobs });
 };

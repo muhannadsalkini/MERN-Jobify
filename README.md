@@ -2230,7 +2230,7 @@ The "express-async-errors" package is an Express.js middleware that helps handle
 [Express Async Errors](https://www.npmjs.com/package/express-async-errors)
 
 ```sh
-npm i express-async-errors@3.1.1
+
 ```
 
 - setup import at the top !!!
