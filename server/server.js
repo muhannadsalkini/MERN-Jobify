@@ -2,7 +2,12 @@ import express from "express";
 import morgan from "morgan"; // Logging HTTP requests in web applications
 import * as dotenv from "dotenv";
 import mongoose from "mongoose";
+
+// Routers
 import jobRouter from "./Routers/jobRouter.js";
+
+// Middleware
+import { errorHandlerMiddleware } from "./middleware/errorHandlerMiddleware.js";
 
 dotenv.config();
 
@@ -22,7 +27,7 @@ app.get("/", (req, res) => {
 
 app.post("/", (req, res) => {
   console.log(req);
-  res.json({ mesaage: "data receved", data: req.body });
+  res.json({ message: "data received", data: req.body });
 });
 
 // Not Found Middleware
@@ -31,11 +36,8 @@ app.use("*", (req, res) => {
 });
 
 // Error Middleware
-/* Error Middleware get triggerd by the existing reqests. It's used to handle any errors that occur during the processing of a request. misstype error or s*/
-app.use((err, req, res, next) => {
-  console.log(err);
-  res.status(500).json({ msg: "something went wrong" });
-});
+/* Error Middleware get trigged by the existing requests. It's used to handle any errors that occur during the processing of a request. mistype error or s*/
+app.use(errorHandlerMiddleware);
 
 try {
   await mongoose.connect(process.env.MONGO_URL);

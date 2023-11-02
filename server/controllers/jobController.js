@@ -1,8 +1,10 @@
 import "express-async-errors"; // To handle the catch errors
 import Job from "../models/jobModel.js";
 import { StatusCodes } from "http-status-codes"; // Used for status codes
+import { NotFoundError } from "../errors/customErrors.js";
 
 // GET ALL JOBS
+// Status Codes
 export const getAllJobs = async (req, res) => {
   try {
     const jobs = await Job.find({});
@@ -29,16 +31,12 @@ export const createJob = async (req, res) => {
 };
 
 // GET A SINGLE JOB
+// Status Codes, Express Async Errors, Custom Errors
 export const getJob = async (req, res) => {
   const { id } = req.params;
-  try {
-    const job = await Job.findById(id);
-    if (!job) return res.status(404).json({ msg: `no job with id ${id}` });
-    res.status(200).json({ job });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ msg: "server error" });
-  }
+  const job = await Job.findById(id);
+  if (!job) throw new NotFoundError(`no job with id : ${id}`);
+  res.status(200).json({ job });
 };
 
 // UPDATE JOB
