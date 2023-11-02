@@ -1,16 +1,13 @@
-import { nanoid } from "nanoid"; // creat uniqe id
+import "express-async-errors"; // To handle the catch errors
 import Job from "../models/jobModel.js";
-
-let jobs = [
-  { id: nanoid(), company: "apple", position: "front-end" },
-  { id: nanoid(), company: "google", position: "back-end" },
-];
+import { StatusCodes } from "http-status-codes"; // Used for status codes
 
 // GET ALL JOBS
 export const getAllJobs = async (req, res) => {
   try {
     const jobs = await Job.find({});
-    res.status(200).json({ jobs });
+    res.status(StatusCodes.OK).json({ jobs });
+    // res.status(200).json({ jobs });
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: "server error" });
@@ -23,7 +20,8 @@ export const createJob = async (req, res) => {
   // Use try catch to handle errors
   try {
     const job = await Job.create({ company, position });
-    res.status(201).json({ job });
+    res.status(StatusCodes.CREATED).json({ job });
+    // res.status(201).json({ job });
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: "server error" });
