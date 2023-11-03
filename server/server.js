@@ -2,6 +2,7 @@ import express from "express";
 import morgan from "morgan"; // Logging HTTP requests in web applications
 import * as dotenv from "dotenv";
 import mongoose from "mongoose";
+import { validateTest } from "./middleware/validationMiddleware.js";
 
 // Routers
 import jobRouter from "./Routers/jobRouter.js";
@@ -21,13 +22,9 @@ app.use(express.json());
 
 app.use("/api/v1/jobs", jobRouter);
 
-app.get("/", (req, res) => {
-  res.send("Hello World");
-});
-
-app.post("/", (req, res) => {
-  console.log(req);
-  res.json({ message: "data received", data: req.body });
+app.post("/api/v1/test", validateTest, (req, res) => {
+  const { name } = req.body;
+  res.json({ message: `hello ${name}` });
 });
 
 // Not Found Middleware

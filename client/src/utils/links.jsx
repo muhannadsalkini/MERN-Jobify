@@ -5,7 +5,7 @@ import { ImProfile } from "react-icons/im";
 import { MdAdminPanelSettings } from "react-icons/md";
 
 const links = [
-  // used . as a path for dashboard to not navigate to dashboard severeal times. We also can use /dashboard insted of the .
+  // used . as a path for dashboard to not navigate to dashboard several times. We also can use /dashboard instead of the .
   { text: "add job", path: ".", icon: <FaWpforms /> },
   { text: "all jobs", path: "all-jobs", icon: <MdQueryStats /> },
   { text: "stats", path: "stats", icon: <IoBarChartSharp /> },
