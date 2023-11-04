@@ -20,6 +20,7 @@ if (process.env.NODE_ENV === "development") {
 }
 app.use(express.json());
 
+// Routes
 app.use("/api/v1/jobs", jobRouter);
 
 app.post("/api/v1/test", validateTest, (req, res) => {
