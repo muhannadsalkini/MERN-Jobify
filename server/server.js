@@ -6,6 +6,7 @@ import { validateTest } from "./middleware/validationMiddleware.js";
 
 // Routers
 import jobRouter from "./Routers/jobRouter.js";
+import userRouter from "./Routers/authRouter.js";
 
 // Middleware
 import { errorHandlerMiddleware } from "./middleware/errorHandlerMiddleware.js";
@@ -22,6 +23,7 @@ app.use(express.json());
 
 // Routes
 app.use("/api/v1/jobs", jobRouter);
+app.use("/api/v1/auth", userRouter);
 
 app.post("/api/v1/test", validateTest, (req, res) => {
   const { name } = req.body;
