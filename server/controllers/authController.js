@@ -1,10 +1,9 @@
 import User from "../models/UserModel.js";
-import bcrypt from "bcryptjs";
+import { hashPassword } from "../utils/passwordUtils.js";
 
 // Register
 export const register = async (req, res) => {
-  const salt = await bcrypt.genSalt(10);
-  const hashedPassword = await bcrypt.hash(req.body.password, salt);
+  const hashedPassword = hashPassword(req.body.password);
   req.body.password = hashedPassword;
   try {
     const user = await User.create(req.body);
@@ -17,10 +16,7 @@ export const register = async (req, res) => {
 
 // Login
 export const login = async (req, res) => {
-  const { email, password } = req.body;
   try {
-    const user = await User.find(filter);
-    res.status(201).json({ user });
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: "server error" });
