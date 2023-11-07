@@ -2,7 +2,7 @@ import express from "express";
 import morgan from "morgan"; // Logging HTTP requests in web applications
 import * as dotenv from "dotenv";
 import mongoose from "mongoose";
-import { validateTest } from "./middleware/validationMiddleware.js";
+import cookieParser from "cookie-parser";
 
 // Routers
 import jobRouter from "./Routers/jobRouter.js";
@@ -10,19 +10,24 @@ import userRouter from "./Routers/authRouter.js";
 
 // Middleware
 import { errorHandlerMiddleware } from "./middleware/errorHandlerMiddleware.js";
+import { validateTest } from "./middleware/validationMiddleware.js";
+import { authenticateUser } from "./middleware/authMiddleware.js";
 
 dotenv.config();
 
+//
 const app = express();
 const port = process.env.PORT || 5100;
 
+//
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
+app.use(cookieParser());
 app.use(express.json());
 
 // Routes
-app.use("/api/v1/jobs", jobRouter);
+app.use("/api/v1/jobs", authenticateUser, jobRouter);
 app.use("/api/v1/auth", userRouter);
 
 app.post("/api/v1/test", validateTest, (req, res) => {
