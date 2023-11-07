@@ -26,9 +26,15 @@ export const login = async (req, res) => {
       return res.status(401).json({ msg: "invalid credentials" });
 
     const token = createJWT({ userId: user._id, role: user.role });
-    console.log(token);
 
-    res.send("login route");
+    const oneDay = 1000 * 60 * 60 * 24;
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      expires: new Date(Date.now() + oneDay), // expire in one day
+      secure: process.env.NODE_ENV === "production",
+    });
+    res.status(200).json({ msg: "user logged in" });
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: "server error" });
