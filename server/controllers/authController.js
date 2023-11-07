@@ -1,5 +1,6 @@
 import User from "../models/UserModel.js";
 import { hashPassword, comparePassword } from "../utils/passwordUtils.js";
+import { createJWT } from "../utils/tokenUtils.js";
 
 // Register
 export const register = async (req, res) => {
@@ -23,6 +24,9 @@ export const login = async (req, res) => {
 
     if (!isValidUser)
       return res.status(401).json({ msg: "invalid credentials" });
+
+    const token = createJWT({ userId: user._id, role: user.role });
+    console.log(token);
 
     res.send("login route");
   } catch (error) {
