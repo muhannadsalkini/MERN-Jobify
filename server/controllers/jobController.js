@@ -18,10 +18,10 @@ export const getAllJobs = async (req, res) => {
 
 // CREATE JOB
 export const createJob = async (req, res) => {
-  const { company, position } = req.body;
+  req.body.createdBy = req.user.userId;
   // Use try catch to handle errors
   try {
-    const job = await Job.create({ company, position });
+    const job = await Job.create(req.body);
     res.status(StatusCodes.CREATED).json({ job });
     // res.status(201).json({ job });
   } catch (error) {
