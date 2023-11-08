@@ -6,7 +6,8 @@ import cookieParser from "cookie-parser";
 
 // Routers
 import jobRouter from "./Routers/jobRouter.js";
-import userRouter from "./Routers/authRouter.js";
+import authRouter from "./Routers/authRouter.js";
+import userRouter from "./Routers/userRouter.js";
 
 // Middleware
 import { errorHandlerMiddleware } from "./middleware/errorHandlerMiddleware.js";
@@ -28,7 +29,8 @@ app.use(express.json());
 
 // Routes
 app.use("/api/v1/jobs", authenticateUser, jobRouter);
-app.use("/api/v1/auth", userRouter);
+app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/users", authenticateUser, userRouter);
 
 app.post("/api/v1/test", validateTest, (req, res) => {
   const { name } = req.body;
