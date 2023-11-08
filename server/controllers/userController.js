@@ -11,9 +11,12 @@ export const getCurrentUser = async (req, res) => {
   }
 };
 
+// admin route
 export const getApplicationStats = async (req, res) => {
   try {
-    res.status(200).json({ msg: "application stats" });
+    const users = await User.countDocuments();
+    const jobs = await Job.countDocuments();
+    res.status(200).json({ users, jobs });
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: "server error" });
