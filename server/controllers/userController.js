@@ -22,7 +22,8 @@ export const getApplicationStats = async (req, res) => {
 
 export const updateUser = async (req, res) => {
   try {
-    res.status(200).json({ msg: "update user" });
+    const updateUser = await User.findByIdAndUpdate(req.user.userId, req.body);
+    res.status(200).json({ msg: "user updated" });
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: "server error" });
