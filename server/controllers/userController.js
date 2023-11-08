@@ -1,6 +1,10 @@
+import User from "../models/UserModel.js";
+import Job from "../models/jobModel.js";
+
 export const getCurrentUser = async (req, res) => {
   try {
-    res.status(200).json({ msg: "get current user" });
+    const user = await User.findOne({ _id: req.user.userId });
+    res.status(200).json({ user });
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: "server error" });
