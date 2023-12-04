@@ -28,7 +28,7 @@ const Register = () => {
   const isSubmitting = navigation.state === "submitting";
   return (
     <Wrapper>
-      <Form method="post" className="form">
+      <Form method="get" className="form">
         <Logo />
         <h4>Register</h4>
         <FormRow type="text" name="name" />

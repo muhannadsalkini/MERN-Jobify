@@ -8,7 +8,7 @@ import {
 const router = Router();
 
 router.route("/register").post(validateRegisterInput, register);
-router.route("/login").get(validateLoginInput, login);
+router.route("/login").post(validateLoginInput, login);
 router.route("/logout").get(logout);
 
 export default router;

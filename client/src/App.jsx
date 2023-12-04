@@ -14,6 +14,7 @@ import {
 } from "./pages";
 
 import { action as registerAction } from "./pages/Register";
+import { action as loginAction } from "./pages/Login";
 
 // Dark Theme
 export const checkDefaultTheme = () => {
@@ -43,6 +44,7 @@ const router = createBrowserRouter([
       {
         path: "login",
         element: <Login />,
+        action: loginAction,
       },
       {
         path: "dashboard",
