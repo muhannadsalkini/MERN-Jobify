@@ -37,6 +37,10 @@ app.post("/api/v1/test", validateTest, (req, res) => {
   res.json({ message: `hello ${name}` });
 });
 
+app.get("/api/v1/test", (req, res) => {
+  res.json({ msg: "test route" });
+});
+
 // Not Found Middleware
 app.use("*", (req, res) => {
   res.status(404).json({ msg: "not found" });
