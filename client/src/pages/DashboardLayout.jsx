@@ -1,23 +1,28 @@
 import { createContext, useState } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, redirect, useLoaderData } from "react-router-dom";
+import customFetch from "../utils/customFetch";
 import Wrapper from "../assets/wrappers/Dashboard";
 import { BigSidebar, Navbar, SmallSidebar } from "../components";
 import { useContext } from "react";
 import { checkDefaultTheme } from "../App";
 
-// Context API allows to share data between components without passing props through every level of the component tree.
+// Loader: A function to provide data to the route element before it renders.
+export const loader = async () => {
+  try {
+    const { data } = await customFetch("/users/current-user");
+    return data;
+  } catch (error) {
+    return redirect("/");
+  }
+};
+
+// Context allows to share data between components without passing props through every level of the component tree.
 const DashboardContext = createContext();
 
 const DashboardLayout = () => {
-  // For this page all is neede is 3 global values. One for user(comming from server), one for the dark mode and one for the sidebar (open or closed)
-
-  // temp
-  const user = { name: "Jhon" };
+  const { user } = useLoaderData();
   const [showSidebar, setShowSidebar] = useState(false);
-  console.log(checkDefaultTheme());
   const [isDark, setIsDark] = useState(checkDefaultTheme());
-  console.log("Changed default theme: " + checkDefaultTheme());
-  console.log("dark mode: " + isDark);
 
   // placeholder functions
   const toggleDarkTheme = () => {
@@ -58,7 +63,7 @@ const DashboardLayout = () => {
           <div>
             <Navbar />
             <div className="dashboard-page">
-              <Outlet />
+              <Outlet context={{ user }} />
             </div>
           </div>
         </main>
@@ -72,4 +77,4 @@ export const useDashboardContext = () => useContext(DashboardContext);
 
 export default DashboardLayout;
 
-// Wrapper used to set a CSS styles, DashboardContext.Provider used to share the global values with other componnets.
+// Wrapper used to set a CSS styles, DashboardContext.Provider used to share the global values with other components.
