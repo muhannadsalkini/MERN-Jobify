@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { FormRow, FormRowSelect } from "../components";
 import Wrapper from "../assets/wrappers/DashboardFormPage";
 import { useOutletContext } from "react-router-dom";
