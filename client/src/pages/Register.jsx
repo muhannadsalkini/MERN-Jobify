@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import Logo from "../components/Logo";
 import Wrapper from "../assets/wrappers/RegisterAndLoginPage";
 import { Form, redirect, useNavigation, Link } from "react-router-dom";
@@ -28,7 +29,7 @@ const Register = () => {
   const isSubmitting = navigation.state === "submitting";
   return (
     <Wrapper>
-      <Form method="get" className="form">
+      <Form method="post" className="form">
         <Logo />
         <h4>Register</h4>
         <FormRow type="text" name="name" />
