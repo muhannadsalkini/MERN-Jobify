@@ -25,6 +25,7 @@ import { loader as editJobLoader } from "./pages/EditJob";
 import { action as editJobAction } from "./pages/EditJob";
 import { action as deleteJobAction } from "./pages/DeleteJob";
 import { loader as adminLoader } from "./pages/Admin";
+import { action as updateProfileAction } from "./pages/Profile";
 
 // Dark Theme
 export const checkDefaultTheme = () => {
@@ -90,6 +91,7 @@ const router = createBrowserRouter([
           {
             path: "profile",
             element: <Profile />,
+            action: updateProfileAction,
           },
           {
             path: "admin",
