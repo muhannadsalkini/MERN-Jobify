@@ -9,16 +9,24 @@ import jobRouter from "./Routers/jobRouter.js";
 import authRouter from "./Routers/authRouter.js";
 import userRouter from "./Routers/userRouter.js";
 
+// Public
+import { dirname } from "path";
+import { fileURLToPath } from "url";
+import path from "path";
+
 // Middleware
 import { errorHandlerMiddleware } from "./middleware/errorHandlerMiddleware.js";
 import { validateTest } from "./middleware/validationMiddleware.js";
 import { authenticateUser } from "./middleware/authMiddleware.js";
 
-dotenv.config();
-
 //
+dotenv.config();
 const app = express();
 const port = process.env.PORT || 5100;
+
+// Access the public file
+const __dirname = dirname(fileURLToPath(import.meta.url));
+app.use(express.static(path.resolve(__dirname, "./public")));
 
 //
 if (process.env.NODE_ENV === "development") {
