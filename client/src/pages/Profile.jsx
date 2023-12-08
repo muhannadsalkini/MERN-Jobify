@@ -17,8 +17,8 @@ export const action = async ({ request }) => {
     await customFetch.patch("/users/update-user", formData);
     toast.success("Profile updated successfully");
   } catch (error) {
-    toast.error(error?.response?.data?.errors[0] || "An error occurred");
     console.log(error);
+    toast.error(error?.response?.data?.errors[0] || "An error occurred");
   }
   return null;
 };
