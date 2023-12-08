@@ -3,6 +3,7 @@ import morgan from "morgan"; // Logging HTTP requests in web applications
 import * as dotenv from "dotenv";
 import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
+import cloudinary from "cloudinary";
 
 // Routers
 import jobRouter from "./Routers/jobRouter.js";
@@ -23,6 +24,13 @@ import { authenticateUser } from "./middleware/authMiddleware.js";
 dotenv.config();
 const app = express();
 const port = process.env.PORT || 5100;
+
+// Cloudinary Cloud
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUD_API_KEY,
+  api_secret: process.env.CLOUD_API_SECRET,
+});
 
 // Access the public file
 const __dirname = dirname(fileURLToPath(import.meta.url));
