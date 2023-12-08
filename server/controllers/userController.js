@@ -1,5 +1,7 @@
 import User from "../models/UserModel.js";
 import Job from "../models/jobModel.js";
+import cloudinary from "cloudinary";
+import { promises as fs } from "fs";
 
 export const getCurrentUser = async (req, res) => {
   try {
@@ -24,8 +26,29 @@ export const getApplicationStats = async (req, res) => {
 };
 
 export const updateUser = async (req, res) => {
+  const newUser = { ...req.body };
+  delete newUser.password;
+
   try {
-    const updateUser = await User.findByIdAndUpdate(req.user.userId, req.body);
+    if (req.file) {
+      // upload image to teh cloud
+      const response = await cloudinary.v2.uploader.upload(req.file.path);
+
+      // remove the local image if the cloud successful
+      await fs.unlink(req.file.path);
+
+      // add the avatar url to the user obj
+      newUser.avatar = response.secure_url;
+      newUser.avatarPublicId = response.public_id;
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(req.user.userId, newUser);
+
+    // remove the old image
+    if (req.file && updatedUser.avatarPublicId) {
+      await cloudinary.v2.uploader.destroy(updatedUser.avatarPublicId);
+    }
+
     res.status(200).json({ msg: "user updated" });
   } catch (error) {
     console.log(error);
