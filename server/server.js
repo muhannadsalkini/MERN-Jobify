@@ -75,3 +75,13 @@ try {
   console.log(error);
   process.exit(1);
 }
+
+// .env
+// PORT=
+// NODE_ENV=
+// MONGO_URL=
+// JWT_SECRET=
+// JWT_EXPIRES_IN=
+// CLOUD_NAME=
+// CLOUD_API_KEY=
+// CLOUD_API_SECRET=
