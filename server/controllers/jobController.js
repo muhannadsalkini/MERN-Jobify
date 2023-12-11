@@ -2,6 +2,8 @@ import "express-async-errors"; // To handle the catch errors
 import Job from "../models/jobModel.js";
 import { StatusCodes } from "http-status-codes"; // Used for status codes
 import { NotFoundError } from "../errors/customErrors.js";
+import mongoose from "mongoose";
+import day from "dayjs";
 
 // GET ALL JOBS
 // Status Codes
@@ -70,4 +72,58 @@ export const deleteJob = async (req, res) => {
     console.log(error);
     res.status(500).json({ msg: "server error" });
   }
+};
+
+export const showStats = async (req, res) => {
+  // Retrieve job status statistics for the user
+  let stats = await Job.aggregate([
+    { $match: { createdBy: new mongoose.Types.ObjectId(req.user.userId) } },
+    { $group: { _id: "$jobStatus", count: { $sum: 1 } } },
+  ]);
+
+  // Transform the statistics into a more convenient format
+  stats = stats.reduce((acc, curr) => {
+    const { _id: title, count } = curr;
+    acc[title] = count;
+    return acc;
+  }, {});
+
+  // Define default statistics in case some statuses are not present
+  const defaultStats = {
+    pending: stats.pending || 0,
+    interview: stats.interview || 0,
+    declined: stats.declined || 0,
+  };
+
+  // Retrieve monthly job application statistics for the user
+  let monthlyApplications = await Job.aggregate([
+    { $match: { createdBy: new mongoose.Types.ObjectId(req.user.userId) } },
+    {
+      $group: {
+        _id: { year: { $year: "$createdAt" }, month: { $month: "$createdAt" } },
+        count: { $sum: 1 },
+      },
+    },
+    { $sort: { "_id.year": -1, "_id.month": -1 } },
+    { $limit: 6 },
+  ]);
+
+  // Transform and format monthly statistics for response
+  monthlyApplications = monthlyApplications
+    .map((item) => {
+      const {
+        _id: { year, month },
+        count,
+      } = item;
+
+      // Format date using the dayjs library
+      const date = day()
+        .month(month - 1)
+        .year(year)
+        .format("MMM YY");
+      return { date, count };
+    })
+    .reverse();
+
+  res.status(StatusCodes.OK).json({ defaultStats, monthlyApplications });
 };
