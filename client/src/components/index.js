@@ -10,3 +10,5 @@ export { default as Job } from "./Job";
 export { default as JobInfo } from "./JobInfo";
 export { default as StateItem } from "./StateItem";
 export { default as SubmitBtn } from "./SubmitBtn";
+export { default as ChartsContainer } from "./ChartsContainer";
+export { default as StatsContainer } from "./StatsContainer";
