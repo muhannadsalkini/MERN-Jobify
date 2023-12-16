@@ -25,11 +25,11 @@ export const getAllJobs = async (req, res) => {
       ];
     }
 
-    if (jobStatus !== "all") {
+    if (jobStatus && jobStatus !== "all") {
       queryObject.jobStatus = jobStatus;
     }
 
-    if (jobType !== "all") {
+    if (jobType && jobType !== "all") {
       queryObject.jobType = jobType;
     }
 
