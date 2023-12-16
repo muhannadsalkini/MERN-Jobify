@@ -9,9 +9,53 @@ import day from "dayjs";
 // Status Codes
 export const getAllJobs = async (req, res) => {
   try {
-    const jobs = await Job.find({ createdBy: req.user.userId });
-    res.status(StatusCodes.OK).json({ jobs });
-    // res.status(200).json({ jobs });
+    const { search, jobStatus, jobType, sort } = req.query;
+
+    const queryObject = {
+      createdBy: req.user.userId,
+    };
+
+    // regex looks if the value is anywhere there and returns it
+    if (search) {
+      // if search exits add it to queryObject. We are using mongo syntax
+      queryObject.$or = [
+        // options: "i" == don't care for the casing
+        { position: { $regex: search, $options: "i" } },
+        { company: { $regex: search, $options: "i" } },
+      ];
+    }
+
+    if (jobStatus !== "all") {
+      queryObject.jobStatus = jobStatus;
+    }
+
+    if (jobType !== "all") {
+      queryObject.jobType = jobType;
+    }
+
+    // sort
+    const sortOptions = {
+      newest: "-createdAt",
+      oldest: "createdAt",
+      "a-z": "position",
+      "z-a": "-position",
+    };
+
+    const sortKey = sortOptions[sort] || sortOptions.newest;
+
+    // setup pagination
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+
+    const jobs = await Job.find(queryObject).sort(sortKey).skip(skip);
+
+    const totalJobs = await Job.countDocuments(queryObject);
+    const numOfPages = Math.ceil(totalJobs / limit);
+
+    res
+      .status(StatusCodes.OK)
+      .json({ totalJobs, numOfPages, currentPage: page, jobs });
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: "server error" });
